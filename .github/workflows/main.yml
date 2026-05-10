@@ -4,7 +4,7 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4 # تحديث للإصدار 4
       
       - name: Install Flutter
         uses: subosito/flutter-action@v2
@@ -26,7 +26,7 @@ jobs:
           zip -r instamod-baqer.ipa Payload
           
       - name: Upload IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4 # هذا هو التحديث الأهم (v4)
         with:
           name: instamod-ipa-file
           path: build/ios/iphoneos/instamod-baqer.ipa
