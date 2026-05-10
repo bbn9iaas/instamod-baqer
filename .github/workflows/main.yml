@@ -1,32 +1,11 @@
-name: Build iOS IPA
-on: [push, workflow_dispatch]
-jobs:
-  build:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4 # تحديث للإصدار 4
-      
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          
-      - name: Force Recreate iOS Files
-        run: |
-          rm -rf ios/
-          flutter create . --platforms=ios
-          
-      - name: Build IPA (No Signing)
+- name: Build IPA (No Signing)
         run: |
           flutter pub get
+          # هذا الأمر سيقوم ببناء ملف .app وتجاهل كل متطلبات التوقيع
           flutter build ios --debug --no-codesign
+          
+          # الآن سنقوم بتحويل الـ .app إلى ملف .ipa يدوياً لكي يقبله Sideloadly
           mkdir -p build/ios/iphoneos/Payload
           cp -r build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload/
           cd build/ios/iphoneos
           zip -r instamod-baqer.ipa Payload
-          
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4 # هذا هو التحديث الأهم (v4)
-        with:
-          name: instamod-ipa-file
-          path: build/ios/iphoneos/instamod-baqer.ipa
